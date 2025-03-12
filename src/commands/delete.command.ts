@@ -1,6 +1,6 @@
 import { Command, CommandRunner, Option } from 'nest-commander';
 import { ApiClientService } from '../modules/api-client/api-client.service';
-import { EntityType } from '../modules/api-client/types';
+import { EntityType } from '../modules/api-client/enums';
 
 @Command({
   name: 'delete',
@@ -16,13 +16,13 @@ export class DeleteCommand extends CommandRunner {
     description: 'Entity type (polyanets, soloons, comeths)',
     required: true,
   })
-  parseType(val: string): EntityType {
-    if (!['polyanets', 'soloons', 'comeths'].includes(val)) {
+  parseType(val: EntityType): EntityType {
+    if (!Object.values(EntityType).includes(val)) {
       throw new Error(
         'Invalid entity type. Must be: polyanets, soloons, or comeths',
       );
     }
-    return val as EntityType;
+    return val;
   }
 
   @Option({

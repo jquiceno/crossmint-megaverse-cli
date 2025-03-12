@@ -1,14 +1,10 @@
+import { Color, Direction } from './enums';
+
 export type SpaceType =
   | 'SPACE'
   | 'POLYANET'
-  | 'RIGHT_COMETH'
-  | 'LEFT_COMETH'
-  | 'UP_COMETH'
-  | 'DOWN_COMETH'
-  | 'WHITE_SOLOON'
-  | 'BLUE_SOLOON'
-  | 'RED_SOLOON'
-  | 'PURPLE_SOLOON';
+  | `${Direction}_COMETH`
+  | `${Color}_SOLOON`;
 
 export interface GoalResponse {
   goal: SpaceType[][];
@@ -18,9 +14,6 @@ export interface ApiClientConfig {
   baseUrl: string;
   candidateId: string;
 }
-
-export type Direction = 'up' | 'down' | 'left' | 'right';
-export type Color = 'white' | 'blue' | 'red' | 'purple';
 
 export interface MapCell {
   type: number;
@@ -37,8 +30,6 @@ export interface MapResponse {
     __v: number;
   };
 }
-
-export type EntityType = 'polyanets' | 'soloons' | 'comeths';
 
 export interface EntityPosition {
   row: number;

@@ -4,13 +4,11 @@ import {
   GoalResponse,
   ApiClientConfig,
   MapResponse,
-  EntityType,
   CreateEntityRequest,
   DeleteEntityRequest,
   EntityResponse,
-  Direction,
-  Color,
 } from './types';
+import { Color, Direction, EntityType } from './enums';
 import { transformMapToGoalFormat } from './utils';
 
 @Injectable()

@@ -1,6 +1,7 @@
 import { Command, CommandRunner, Option } from 'nest-commander';
 import { ApiClientService } from '../modules/api-client/api-client.service';
-import { Direction, Color, EntityType } from '../modules/api-client/types';
+import { Color, Direction, EntityType } from '../modules/api-client/enums';
+import { validateOptions } from './validate';
 
 @Command({
   name: 'create',
@@ -17,12 +18,15 @@ export class CreateCommand extends CommandRunner {
     required: true,
   })
   parseType(val: string): EntityType {
-    if (!['polyanets', 'soloons', 'comeths'].includes(val)) {
+    const entityType = val.toLowerCase();
+
+    if (!Object.values(EntityType).includes(entityType as EntityType)) {
       throw new Error(
         'Invalid entity type. Must be: polyanets, soloons, or comeths',
       );
     }
-    return val as EntityType;
+
+    return entityType as EntityType;
   }
 
   @Option({
@@ -49,10 +53,8 @@ export class CreateCommand extends CommandRunner {
       'Direction for comeths (up, down, left, right). Defaults to up',
   })
   parseDirection(val: string): Direction {
-    if (!['up', 'down', 'left', 'right'].includes(val)) {
-      throw new Error('Invalid direction. Must be: up, down, left, or right');
-    }
-    return val.toUpperCase() as Direction;
+    const direction = val.toLowerCase();
+    return direction as Direction;
   }
 
   @Option({
@@ -61,10 +63,8 @@ export class CreateCommand extends CommandRunner {
       'Color for soloons (white, blue, red, purple). Defaults to red',
   })
   parseColor(val: string): Color {
-    if (!['white', 'blue', 'red', 'purple'].includes(val)) {
-      throw new Error('Invalid color. Must be: white, blue, red, or purple');
-    }
-    return val.toUpperCase() as Color;
+    const color = val.toLowerCase();
+    return color as Color;
   }
 
   async run(
@@ -80,10 +80,12 @@ export class CreateCommand extends CommandRunner {
     try {
       const { type, row, column, direction, color } = options;
 
+      validateOptions({ type, direction, color });
+
       const entityOptions = {
         direction:
-          type === 'comeths' ? direction || ('up' as Direction) : direction,
-        color: type === 'soloons' ? color || ('red' as Color) : color,
+          type === EntityType.COMETHS ? direction || Direction.UP : direction,
+        color: type === EntityType.SOLOONS ? color || Color.RED : color,
       };
 
       const response = await this.apiClient.createEntity(
