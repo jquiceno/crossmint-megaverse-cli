@@ -1,18 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import {
-  ApiClientService,
-  transformMapToNaturalFormat,
-  getEntityType,
-} from '@modules/api-client';
+import { getEntityType } from '@modules/api-client';
+import { DeleteEntityRepository } from '@modules/challenges/domain';
 
 @Injectable()
 export class ClearMapUseCase {
-  constructor(private readonly apiClient: ApiClientService) {}
+  constructor(private readonly deleteEntity: DeleteEntityRepository) {}
 
-  async execute(): Promise<{ failedCount: number; deletedCount: number }> {
-    const response = await this.apiClient.getMap();
-    const map = transformMapToNaturalFormat(response);
-
+  async execute(
+    map: string[][],
+  ): Promise<{ failedCount: number; deletedCount: number }> {
     let deletedCount = 0;
     let failedCount = 0;
 
@@ -25,10 +21,10 @@ export class ClearMapUseCase {
         if (!entityType) continue;
 
         try {
-          await this.apiClient.deleteEntity(entityType, row, col);
+          await this.deleteEntity.execute(entityType, row, col);
           deletedCount++;
 
-          await this.delay(500);
+          await this.delay(100);
         } catch {
           failedCount++;
         }

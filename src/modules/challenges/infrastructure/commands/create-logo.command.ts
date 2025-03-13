@@ -1,4 +1,5 @@
 import { CommandRunner, Command } from 'nest-commander';
+import { ApiClientService } from '@modules/api-client';
 
 import { CreateCrossmintLogoUseCase } from '../../application/use-cases';
 
@@ -9,6 +10,7 @@ import { CreateCrossmintLogoUseCase } from '../../application/use-cases';
 export class CreateLogoCommand extends CommandRunner {
   constructor(
     private readonly createCrossmintLogoUseCase: CreateCrossmintLogoUseCase,
+    private readonly apiClient: ApiClientService,
   ) {
     super();
   }
@@ -16,7 +18,9 @@ export class CreateLogoCommand extends CommandRunner {
   async run(): Promise<void> {
     console.log('Creating logo challenge...');
 
-    await this.createCrossmintLogoUseCase.execute();
+    const { goal } = await this.apiClient.getGoal();
+
+    await this.createCrossmintLogoUseCase.execute(goal);
 
     console.log('Challenge completed');
   }
