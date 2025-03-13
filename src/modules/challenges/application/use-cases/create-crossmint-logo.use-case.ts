@@ -1,13 +1,14 @@
-import { getEntityOptions } from '@modules/api-client';
 import {
   CreateEntityRepository,
   GetEntityTypeByNameService,
+  GetOptionsByEntityNameService,
 } from '@modules/challenges/domain';
 
 export class CreateCrossmintLogoUseCase {
   constructor(
     private readonly createEntity: CreateEntityRepository,
     private readonly getEntityTypeByName: GetEntityTypeByNameService,
+    private readonly getOptionsByEntityName: GetOptionsByEntityNameService,
   ) {}
 
   async execute(goal: string[][]): Promise<void> {
@@ -20,7 +21,7 @@ export class CreateCrossmintLogoUseCase {
 
         if (!entityType) continue;
 
-        const options = getEntityOptions(cell);
+        const options = this.getOptionsByEntityName.execute(cell);
         await this.createEntity.execute(entityType, row, col, options);
         await this.delay(100);
       }

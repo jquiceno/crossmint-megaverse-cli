@@ -6,6 +6,7 @@ import {
   CreateEntityRepository,
   DeleteEntityRepository,
   GetEntityTypeByNameService,
+  GetOptionsByEntityNameService,
 } from './domain';
 import {
   CreateEntityService,
@@ -35,6 +36,10 @@ import {
       useClass: GetEntityTypeByNameService,
     },
     {
+      provide: GetOptionsByEntityNameService,
+      useClass: GetOptionsByEntityNameService,
+    },
+    {
       provide: ClearMapUseCase,
       useFactory: (
         deleteEntity: DeleteEntityRepository,
@@ -47,8 +52,18 @@ import {
       useFactory: (
         createEntity: CreateEntityRepository,
         getEntityTypeByName: GetEntityTypeByNameService,
-      ) => new CreateCrossmintLogoUseCase(createEntity, getEntityTypeByName),
-      inject: [CreateEntityRepository, GetEntityTypeByNameService],
+        getOptionsByEntityName: GetOptionsByEntityNameService,
+      ) =>
+        new CreateCrossmintLogoUseCase(
+          createEntity,
+          getEntityTypeByName,
+          getOptionsByEntityName,
+        ),
+      inject: [
+        CreateEntityRepository,
+        GetEntityTypeByNameService,
+        GetOptionsByEntityNameService,
+      ],
     },
     {
       provide: CreateXUseCase,
