@@ -1,8 +1,8 @@
-import { GoalResponse, MapResponse, SpaceType, MapCell } from './types';
+import { MapResponse, SpaceType, MapCell } from '../interfaces';
 
-export const transformMapToGoalFormat = (
+export const transformMapToNaturalFormat = (
   mapResponse: MapResponse,
-): GoalResponse => {
+): SpaceType[][] => {
   const transformCell = (cell: MapCell | null): SpaceType => {
     if (!cell) return 'SPACE';
 
@@ -17,9 +17,7 @@ export const transformMapToGoalFormat = (
     return 'POLYANET';
   };
 
-  const goal = mapResponse.map.content.map((row) =>
+  return mapResponse.map.content.map((row) =>
     row.map((cell) => transformCell(cell)),
   );
-
-  return { goal };
 };

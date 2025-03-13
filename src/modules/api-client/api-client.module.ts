@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ApiClientService } from './api-client.service';
-import { ApiClientConfig } from './types';
+import { ApiClientConfig } from './interfaces';
 
 @Module({
   providers: [

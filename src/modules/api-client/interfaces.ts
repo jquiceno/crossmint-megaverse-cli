@@ -23,11 +23,9 @@ export interface MapCell {
 
 export interface MapResponse {
   map: {
-    _id: string;
     content: (MapCell | null)[][];
     candidateId: string;
     phase: number;
-    __v: number;
   };
 }
 

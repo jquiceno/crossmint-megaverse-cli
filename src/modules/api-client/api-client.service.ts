@@ -7,9 +7,8 @@ import {
   CreateEntityRequest,
   DeleteEntityRequest,
   EntityResponse,
-} from './types';
+} from './interfaces';
 import { Color, Direction, EntityType } from './enums';
-import { transformMapToGoalFormat } from './utils';
 
 @Injectable()
 export class ApiClientService {
@@ -35,11 +34,6 @@ export class ApiClientService {
       `/map/${this.candidateId}`,
     );
     return data;
-  }
-
-  async getMapAsGoal(): Promise<GoalResponse> {
-    const mapResponse = await this.getMap();
-    return transformMapToGoalFormat(mapResponse);
   }
 
   async createEntity(
