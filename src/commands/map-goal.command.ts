@@ -1,5 +1,6 @@
 import { Command, CommandRunner } from 'nest-commander';
-import { ApiClientService } from '../modules/api-client/api-client.service';
+import { ApiClientService } from '@modules/api-client/api-client.service';
+import { transformMapToNaturalFormat } from '@modules/api-client';
 
 @Command({
   name: 'map-goal',
@@ -12,8 +13,10 @@ export class MapGoalCommand extends CommandRunner {
 
   async run(): Promise<void> {
     try {
-      const response = await this.apiClient.getMapAsGoal();
-      console.log(JSON.stringify(response, null, 2));
+      const response = await this.apiClient.getMap();
+      console.log(
+        JSON.stringify(transformMapToNaturalFormat(response), null, 2),
+      );
     } catch (error) {
       console.error('Error getting map as goal:', (error as Error).message);
     }

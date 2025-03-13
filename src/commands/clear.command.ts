@@ -1,6 +1,6 @@
 import { Command, CommandRunner } from 'nest-commander';
 import { ApiClientService } from '../modules/api-client/api-client.service';
-import { EntityType } from '../modules/api-client/enums';
+import { transformMapToNaturalFormat, EntityType } from '@modules/api-client';
 
 @Command({
   name: 'clear',
@@ -26,25 +26,24 @@ export class ClearCommand extends CommandRunner {
   async run(): Promise<void> {
     try {
       console.log('Fetching current map state...');
-      const { goal } = await this.apiClient.getMapAsGoal();
+      const response = await this.apiClient.getMap();
+      const map = transformMapToNaturalFormat(response);
 
       console.log('Starting to clear entities...');
       let deletedCount = 0;
       let failedCount = 0;
 
-      for (let row = 0; row < goal.length; row++) {
-        for (let col = 0; col < goal[row].length; col++) {
-          const cell = goal[row][col];
+      for (let row = 0; row < map.length; row++) {
+        for (let col = 0; col < map[row].length; col++) {
+          const cell = map[row][col];
           if (cell === 'SPACE') continue;
 
           const entityType = this.getEntityType(cell);
           if (!entityType) continue;
 
           try {
-            console.log(`Deleting ${cell} at position [${row}, ${col}]...`);
             await this.apiClient.deleteEntity(entityType, row, col);
             deletedCount++;
-            console.log(`Successfully deleted ${cell} at [${row}, ${col}]`);
 
             await this.delay(500);
           } catch (error) {
