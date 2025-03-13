@@ -1,9 +1,7 @@
 import { Module } from '@nestjs/common';
-import * as Commands from './commands';
-import { ApiClientModule } from './modules/api-client/api-client.module';
+import { ChallengesModule } from '@modules/challenges';
 
 @Module({
-  imports: [ApiClientModule],
-  providers: [...Object.values(Commands)],
+  imports: [ChallengesModule],
 })
 export class AppModule {}
