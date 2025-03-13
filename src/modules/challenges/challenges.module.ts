@@ -3,7 +3,11 @@ import { ApiClientModule } from '../api-client/api-client.module';
 import * as useCases from './application/use-cases';
 import * as commands from './infrastructure/commands';
 import * as services from './infrastructure/services';
-import { CreateEntityRepository, DeleteEntityRepository } from './domain';
+import {
+  CreateEntityRepository,
+  DeleteEntityRepository,
+  GetEntityTypeByNameService,
+} from './domain';
 import {
   CreateEntityService,
   DeleteEntityService,
@@ -22,6 +26,10 @@ import {
     {
       provide: DeleteEntityRepository,
       useExisting: DeleteEntityService,
+    },
+    {
+      provide: GetEntityTypeByNameService,
+      useClass: GetEntityTypeByNameService,
     },
   ],
   exports: [

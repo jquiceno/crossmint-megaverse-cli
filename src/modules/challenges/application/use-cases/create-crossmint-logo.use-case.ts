@@ -1,10 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { getEntityType, getEntityOptions } from '@modules/api-client';
-import { CreateEntityRepository } from '@modules/challenges/domain';
+import { getEntityOptions } from '@modules/api-client';
+import {
+  CreateEntityRepository,
+  GetEntityTypeByNameService,
+} from '@modules/challenges/domain';
 
 @Injectable()
 export class CreateCrossmintLogoUseCase {
-  constructor(private readonly createEntity: CreateEntityRepository) {}
+  constructor(
+    private readonly createEntity: CreateEntityRepository,
+    private readonly getEntityTypeByName: GetEntityTypeByNameService,
+  ) {}
 
   async execute(goal: string[][]): Promise<void> {
     for (let row = 0; row < goal.length; row++) {
@@ -12,7 +18,7 @@ export class CreateCrossmintLogoUseCase {
         const cell = goal[row][col];
         if (cell === 'SPACE') continue;
 
-        const entityType = getEntityType(cell);
+        const entityType = this.getEntityTypeByName.execute(cell);
 
         if (!entityType) continue;
 

@@ -1,10 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { getEntityType } from '@modules/api-client';
-import { DeleteEntityRepository } from '@modules/challenges/domain';
+import {
+  DeleteEntityRepository,
+  GetEntityTypeByNameService,
+} from '@modules/challenges/domain';
 
 @Injectable()
 export class ClearMapUseCase {
-  constructor(private readonly deleteEntity: DeleteEntityRepository) {}
+  constructor(
+    private readonly deleteEntity: DeleteEntityRepository,
+    private readonly getEntityTypeByName: GetEntityTypeByNameService,
+  ) {}
 
   async execute(
     map: string[][],
@@ -17,7 +22,7 @@ export class ClearMapUseCase {
         const cell = map[row][col];
         if (cell === 'SPACE') continue;
 
-        const entityType = getEntityType(cell);
+        const entityType = this.getEntityTypeByName.execute(cell);
         if (!entityType) continue;
 
         try {
