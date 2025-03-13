@@ -1,11 +1,9 @@
-import { Injectable } from '@nestjs/common';
 import { getEntityOptions } from '@modules/api-client';
 import {
   CreateEntityRepository,
   GetEntityTypeByNameService,
 } from '@modules/challenges/domain';
 
-@Injectable()
 export class CreateCrossmintLogoUseCase {
   constructor(
     private readonly createEntity: CreateEntityRepository,

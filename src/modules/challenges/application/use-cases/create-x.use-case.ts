@@ -1,7 +1,5 @@
-import { Injectable } from '@nestjs/common';
 import { EntityType, CreateEntityRepository } from '../../domain';
 
-@Injectable()
 export class CreateXUseCase {
   constructor(private readonly createEntirty: CreateEntityRepository) {}
 

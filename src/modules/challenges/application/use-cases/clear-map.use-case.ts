@@ -1,10 +1,8 @@
-import { Injectable } from '@nestjs/common';
 import {
   DeleteEntityRepository,
   GetEntityTypeByNameService,
 } from '@modules/challenges/domain';
 
-@Injectable()
 export class ClearMapUseCase {
   constructor(
     private readonly deleteEntity: DeleteEntityRepository,
